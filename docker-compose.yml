@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: teamproject
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"  # MySQL에 접근할 수 있도록 포트 추가
+
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql://root:1234@db:3306/teamproject  # 올바른 DATABASE_URL 설정
+      - DB_USER=root  # 추가적인 환경 변수 설정
+      - DB_PASSWORD=1234
+      - DB_NAME=teamproject
+      - DB_HOST=db
+      - DB_PORT=3306
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

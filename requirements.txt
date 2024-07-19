@@ -1,0 +1,11 @@
+Django>=3.2,<4.0
+djangorestframework
+django-environ
+mysqlclient
+gunicorn
+psycopg2-binary
+Pillow
+django-cors-headers
+djangorestframework-simplejwt
+whitenoise
+mysqlclient
