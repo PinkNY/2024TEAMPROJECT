@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Yeongdo';
+    src: url('meme/static/fonts/Yeongdo.woff2') format('woff2'),
+        url('meme/static/fonts/Yeongdo.woff') format('woff'),
+        url('meme/static/fonts/Yeongdo.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Yeongdo', sans-serif;
+}

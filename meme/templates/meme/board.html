@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 - MEMEC</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            flex: 1;
+            padding-top: 70px;
+        }
+        .navbar {
+            width: 100%;
+            height: 100px;
+            background-color: transparent !important; /* 네비게이션바 배경 투명 */
+        }
+        .navbar-brand {
+            font-size: 3em;
+        }
+        .nav-link {
+            font-size: 2em;
+            margin-right: -5px;
+        }
+        .board-title {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 4em;
+            margin-top: 100px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center; /* 가로 정렬 */
+            vertical-align: middle; /* 세로 정렬 */
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        th:nth-child(1) {
+            width: 10%; /* 1 */
+        }
+        th:nth-child(2) {
+            width: 50%; /* 5 */
+        }
+        th:nth-child(3) {
+            width: 20%; /* 2 */
+        }
+        th:nth-child(4) {
+            width: 20%; /* 2 */
+        }
+        .btn-create-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .search-box {
+            display: flex;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 600px; /* 최대 너비 설정 */
+        }
+        .search-container input[type="text"] {
+            border: none;
+            padding: 10px;
+            font-size: 1em;
+            flex: 1;
+        }
+        .search-container button {
+            background: none;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .search-container button i {
+            font-size: 1.2em;
+        }
+        .btn-create {
+            margin-bottom: 20px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            list-style: none;
+        }
+        .pagination li {
+            display: inline;
+            margin: 0 5px;
+        }
+        .pagination a, .pagination span {
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #007bff;
+            background-color: transparent;
+            border: none;
+        }
+        .pagination .current, .pagination .active .page-link {
+            background-color: transparent;
+            color: #007bff;
+            border: none;
+        }
+        .pagination .disabled {
+            color: #6c757d;
+            pointer-events: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="{% url 'home' %}">MEMEC</a>
+        <a class="nav-link btn btn-transparent text-success ml-2" href="{% url 'upload' %}" role="button">업로드</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-primary ml-2" href="{% url 'logout' %}" role="button">로그아웃</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-primary ml-2" href="{% url 'login' %}" role="button">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-secondary ml-2" href="{% url 'signup' %}" role="button">회원가입</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="board-title">게시판</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in page_obj %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></td> <!-- 링크 추가 -->
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.date|date:"Y-m-d" }}</td> <!-- 날짜 형식 수정 -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </span>
+                    </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </span>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="btn-create-container">
+            <a href="{% url 'create_post' %}" class="btn btn-primary btn-create">글쓰기</a>
+        </div>
+        <div class="search-container">
+            <form action="{% url 'search_board' %}" method="get" class="search-box">
+                <input type="text" name="query" placeholder="검색어를 입력하세요">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

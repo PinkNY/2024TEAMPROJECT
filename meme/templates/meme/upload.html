@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이미지 업로드 - M4M</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+    .navbar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+    .navbar-brand {
+        font-size: 3em;
+    }
+    .nav-link {
+        font-size: 2em;
+        margin-right: -5px;
+    }
+    .nav-link.login {
+        color: #007bff !important; /* 로그인 버튼 색상 변경 */
+    }
+    .nav-link.signup {
+        margin-left: 10px; /* 로그인과 회원가입 버튼 간격 조정 */
+    }
+    .nav-link.board {
+        margin-left: 10px; /* 브랜드와 게시판 버튼 간격 조정 */
+        color:darkcyan !important;
+    }
+    .container {
+        text-align: center;
+        margin-top: 150px;
+    }
+    .upload-title {
+        font-size: 5em;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 2em;
+    }
+    .btn-primary {
+        font-size: 1.5em;
+        padding: 10px 20px;
+        margin-top: 2em;
+    }
+    /* 파일 선택 버튼 크기 조절 */
+    .custom-file-input {
+        font-size: 1.5em;
+    }
+    .custom-file-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .custom-file-label::after {
+        content: "파일 선택";
+    }
+    /* 이미지 미리보기 스타일 */
+    .image-preview {
+        margin-top: 20px;
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">M4M</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link board" href="{% url 'board' %}">게시판</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link login" href="{% url 'logout' %}">로그아웃</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link login" href="{% url 'login' %}">로그인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link signup" href="{% url 'signup' %}">회원가입</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="upload-title">이미지 업로드</h1>
+    <img id="imagePreview" class="image-preview" src="#" alt="미리보기" style="display: none;">
+    <form>
+        <div class="form-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="imageFile" accept="image/*">
+                <label class="custom-file-label" for="imageFile">선택한 파일 없음</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">업로드</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+        var fileName = document.getElementById("imageFile").files[0].name;
+        var nextSibling = e.target.nextElementSibling;
+        nextSibling.innerText = fileName;
+
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = document.getElementById("imagePreview");
+            img.src = e.target.result;
+            img.style.display = "block";
+        }
+        reader.readAsDataURL(file);
+    });
+</script>
+</body>
+</html>

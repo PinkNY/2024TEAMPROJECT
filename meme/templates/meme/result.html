@@ -1,0 +1,19 @@
+<!-- result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Result</title>
+</head>
+<body>
+    <h1>Prediction Result</h1>
+    <img src="{{ uploaded_file_url }}" alt="Uploaded Image">
+    <h2>Predictions:</h2>
+    <ul>
+        {% for prediction in predictions %}
+            <li>{{ prediction }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'upload_and_predict' %}">Upload another image</a>
+</body>
+</html>

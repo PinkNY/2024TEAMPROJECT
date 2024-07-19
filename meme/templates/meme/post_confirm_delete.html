@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 삭제 - MEMEC</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">게시글 삭제</h1>
+        <p>정말로 게시글을 삭제하시겠습니까?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">확인</button>
+            <a href="{% url 'post_detail' post.id %}" class="btn btn-secondary">취소</a>
+        </form>
+    </div>
+</body>
+</html>

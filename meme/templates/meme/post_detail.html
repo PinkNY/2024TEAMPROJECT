@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - MEMEC</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            background-color: transparent !important;
+        }
+        .navbar-brand {
+            font-size: 3rem;
+        }
+        .nav-link {
+            font-size: 2rem; /* 글씨 크기를 키웁니다 */
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 2px solid #ddd; /* 제목 박스 테두리 */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .post-meta {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px; /* 작성자와 작성일 간격 */
+        }
+        .post-title {
+            font-size: 4rem;
+        }
+        .post-content {
+            font-size: 2.5rem;
+            border: 2px solid #ddd; /* 내용 박스 테두리 */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .comment-form {
+            margin-top: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .comment-list {
+            margin-top: 30px;
+        }
+        .comment {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .comment-author {
+            font-weight: bold;
+        }
+        .btn-toolbar {
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        .comment-form textarea {
+            width: 85%; /* 너비를 길게 설정 */
+            height: 40px; /* 높이를 낮게 설정 */
+            resize: none; /* 크기 조정 불가 */
+            border: none; /* 테두리 제거 */
+            outline: none; /* 포커스 시 아웃라인 제거 */
+        }
+        .comment-form button {
+            width: 10%; /* 버튼 너비 설정 */
+            height: 40px; /* 버튼 높이 설정 */
+        }
+    </style>
+    <script>
+        function confirmDelete() {
+            if (confirm('게시글을 삭제하시겠습니까?')) {
+                document.getElementById('delete-form').submit();
+            }
+        }
+
+        function confirmEdit() {
+            if (confirm('게시글을 수정하시겠습니까?')) {
+                window.location.href = "{% url 'post_edit' post.id %}";
+            }
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'home' %}">MEMEC</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">회원가입</a>
+                    </li>
+                {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">로그아웃</a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="post-header">
+            <h1 class="center-text">{{ post.title }}</h1>
+            <div class="post-meta text-muted">
+                <p>작성자: {{ post.author.username }}</p>
+                <p>작성일: {{ post.created_at|date:"Y-m-d" }}</p>
+            </div>
+        </div>
+        <div class="post-content mt-3">
+            <p>{{ post.content }}</p>
+        </div>
+        <div class="btn-toolbar mt-3">
+            <a href="{% url 'board' %}" class="btn btn-primary">뒤로 가기</a>
+            {% if user.is_authenticated and user == post.author %}
+                <div class="btn-group">
+                    <button class="btn btn-warning" onclick="confirmEdit()">수정</button>
+                    <button class="btn btn-danger" onclick="confirmDelete()">삭제</button>
+                    <form id="delete-form" method="post" action="{% url 'post_delete' post.id %}" style="display:none;">
+                        {% csrf_token %}
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- 댓글 목록 -->
+        <div class="comment-list">
+            <h2>댓글</h2>
+            {% for comment in post.comments.all %}
+            <div class="comment">
+                <p class="comment-author">{{ comment.author.username }}</p>
+                <p>{{ comment.content }}</p>
+                <p class="text-muted">{{ comment.created_at|date:"Y-m-d H:i" }}</p>
+            </div>
+            {% empty %}
+            <p>댓글이 없습니다.</p>
+            {% endfor %}
+        </div>
+
+        <!-- 댓글 입력창 -->
+        <div class="comment-form">
+            <form method="post" style="display: flex; width: 100%;">
+                {% csrf_token %}
+                <textarea id="id_content" name="content" placeholder="댓글을 입력하세요"></textarea>
+                <button type="submit" class="btn btn-primary">등록</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

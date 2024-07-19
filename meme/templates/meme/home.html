@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M4M</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar {
+            width: 100%;
+            height: 100px;
+            background-color: transparent !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .navbar-brand {
+            font-size: 7em; /* 네비게이션바 브랜드 글씨 크기 키움 */
+            margin-right: auto; /* 왼쪽 정렬 */
+        }
+        .nav-link {
+            font-size: 2em; /* 네비게이션바 링크 글씨 크기 키움 */
+            margin-right: 15px;
+        }
+        .logo {
+            font-size: 18em; /* 기존 크기의 5배 */
+            margin-bottom: 10px; /* margin-bottom 값을 줄여서 로고를 위로 올림 */
+            height: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo span {
+            display: inline-block;
+            opacity: 0;
+        }
+        .logo .m1 {
+            animation: slideInLeft 1s forwards;
+        }
+        .logo .four {
+            animation: slideInTop 1s forwards;
+        }
+        .logo .m2 {
+            animation: slideInBottom 1s forwards;
+        }
+        @keyframes slideInLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideInTop {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideInBottom {
+            0% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .navbar-nav {
+            margin-left: auto; /* 오른쪽 정렬 */
+            margin-right: auto; /* 왼쪽 정렬 */
+        }
+        .navbar-nav-right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: auto; /* 오른쪽 정렬 */
+            list-style: none;
+        }
+        .btn-transparent {
+            background-color: transparent; /* 배경 투명 */
+            border: none; /* 테두리 제거 */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'home' %}">M4M</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-link btn btn-transparent text-success" href="{% url 'upload' %}" id="upload-button" role="button">업로드</a>
+                <a class="nav-link btn btn-transparent text-info" href="{% url 'board' %}" id="board-button" role="button">게시판</a>
+            </div>
+            <ul class="navbar-nav-right">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-primary" href="{% url 'logout' %}" role="button">로그아웃</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-primary" href="{% url 'login' %}" role="button">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-transparent text-secondary" href="{% url 'signup' %}" role="button">회원가입</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <div class="logo">
+            <span class="m1">M</span>
+            <span class="four">4</span>
+            <span class="m2">M</span>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var isAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
+
+            document.getElementById('upload-button').addEventListener('click', function(event) {
+                if (isAuthenticated === 'false') {
+                    event.preventDefault();
+                    window.location.href = "{% url 'login' %}?next={% url 'upload' %}";
+                }
+            });
+
+            document.getElementById('board-button').addEventListener('click', function(event) {
+                if (isAuthenticated === 'false') {
+                    event.preventDefault();
+                    window.location.href = "{% url 'login' %}?next={% url 'board' %}";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

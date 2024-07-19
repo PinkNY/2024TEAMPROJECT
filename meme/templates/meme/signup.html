@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - M4M</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            width: 100%;
+            height: 100px; /* 네비게이션바의 높이를 키움 */
+            background-color: transparent !important; /* 네비게이션바 배경 투명 */
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* 양 끝으로 정렬 */
+            padding: 0 20px; /* 네비게이션 바 양쪽 여백 추가 */
+        }
+        .navbar-brand {
+            font-size: 7em; /* 네비게이션바 브랜드 글씨 크기 키움 */
+        }
+        .nav-link {
+            font-size: 2em; /* 네비게이션바 링크 글씨 크기 키움 */
+            margin-right: 15px;
+        }
+        .navbar-nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: auto;
+            list-style: none;
+        }
+        .container {
+            text-align: center;
+            margin-top: 80px; /* 네비게이션 바와의 간격을 위한 마진 */
+            opacity: 0;
+            transform: translateY(50px); /* 애니메이션 시작 지점 */
+            animation: slideUp 1s forwards; /* 애니메이션 적용 */
+            animation-delay: 1s; /* 애니메이션 지연 시간 */
+        }
+        .logo {
+            font-size: 10em;
+            margin-top: 70px;
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+        }
+        .logo span {
+            display: inline-block;
+            opacity: 0;
+        }
+        .logo .m1, .logo .four, .logo .m2 {
+            animation: slideDown 1s forwards;
+        }
+        .logo .m1 {
+            animation-delay: 0.2s;
+        }
+        .logo .four {
+            animation-delay: 0.4s;
+        }
+        .logo .m2 {
+            animation-delay: 0.6s;
+        }
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .form-label, .form-control, .form-text {
+            font-size: 1.5em; /* 폰트 크기를 조절 */
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 3em;
+            margin-left: 10em;
+        }
+        .form-row {
+            display: flex;
+            width: 100%;
+            align-items: center;
+        }
+        .form-label {
+            margin-bottom: 0em; /* 레이블과 입력칸 간의 간격 조절 */
+            text-align: right;
+            flex: 0 0 150px; /* 레이블의 너비를 150px로 고정 */
+        }
+        .form-control {
+            flex: 1;
+            margin-left: 1em;
+        }
+        .form-text {
+            margin-top: 0.5em; /* 도움말과 입력칸 사이의 간격 설정 */
+            text-align: left; /* 도움말을 왼쪽 정렬 */
+            margin-right: 1em;
+        }
+        .signup-title {
+            font-size: 5em; /* 회원가입 제목의 폰트 크기 조절 */
+            margin-bottom: 1.5em;
+        }
+        .btn-primary {
+            font-size: 1.5em; /* 회원가입 버튼의 폰트 크기 조절 */
+            padding: 10px 20px; /* 회원가입 버튼의 패딩 조절 */
+            margin-top: 2em;
+            background-color: #6c757d; /* 회색 배경 */
+            border: none; /* 테두리 제거 */
+        }
+        .btn-back {
+            font-size: 1.5em; /* 뒤로 버튼의 폰트 크기 조절 */
+            padding: 10px 20px; /* 뒤로 버튼의 패딩 조절 */
+            margin-top: 2em;
+            background-color: transparent; /* 투명한 배경 */
+            border: none; /* 테두리 제거 */
+            color: #007bff; /* 글자 색상 */
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* 버튼 간격 */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'home' %}">M4M</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-transparent text-primary ml-2" href="{% url 'login' %}" role="button">로그인</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="logo">
+        <span class="m1">M</span>
+        <span class="four">4</span>
+        <span class="m2">M</span>
+    </div>
+    <div class="container">
+        <h1 class="mt-3 signup-title">회원가입</h1> <!-- 회원가입 제목의 폰트 크기 조절 -->
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="username" class="form-label">아이디</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="아이디를 입력하세요">
+                </div>
+                <small class="form-text text-muted">아이디는 6자 이상이어야 합니다.</small> <!-- 아이디 도움말 -->
+            </div>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="nickname" class="form-label">닉네임</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="닉네임을 입력하세요">
+                </div>    
+                <small class="form-text text-muted">닉네임은 3자 이상이어야 합니다.</small><!--닉네임 도움말-->
+            </div>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="password" class="form-label">비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력하세요">
+                </div>
+                <small class="form-text text-muted">비밀번호는 8자 이상이어야 합니다.</small> <!-- 비밀번호 도움말 -->
+            </div>
+            <div class="form-group">
+                <div class="form-row">
+                    <label for="confirm_password" class="form-label">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="비밀번호를 다시 입력하세요">
+                </div>
+                <small class="form-text text-muted">비밀번호를 다시 한 번 입력하세요.</small> <!-- 비밀번호 확인 도움말 -->
+            </div>
+            <div class="btn-container">
+                <button type="button" class="btn btn-back" onclick="window.history.back()">뒤로</button>
+                <button type="submit" class="btn btn-primary">회원가입</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
