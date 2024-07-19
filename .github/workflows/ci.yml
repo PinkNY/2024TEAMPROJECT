@@ -42,7 +42,7 @@ jobs:
           sudo apt-get install -y mysql-server
           sudo service mysql start
           sleep 10
-          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY '${{ env.DB_PASSWORD }}'; FLUSH PRIVILEGES;"
+          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${{ env.DB_PASSWORD }}'; FLUSH PRIVILEGES;"
           sudo mysql -u root -p${{ env.DB_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ${{ env.DB_NAME }};"
 
       - name: Run migrations
