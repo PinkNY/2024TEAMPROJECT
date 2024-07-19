@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - master  # master 브랜치에 푸시될 때마다 실행
+      - skdudgns  # skdudgns 브랜치에 푸시될 때마다 실행
   pull_request:
     branches:
       - master  # master 브랜치로 풀 리퀘스트가 열릴 때마다 실행
+      - skdudgns  # skdudgns 브랜치로 풀 리퀘스트가 열릴 때마다 실행
 
 jobs:
   build:
