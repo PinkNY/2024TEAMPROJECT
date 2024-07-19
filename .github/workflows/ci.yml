@@ -41,7 +41,7 @@ jobs:
           sudo apt-get upgrade -y
           sudo apt-get install -y mysql-server
           sudo service mysql start
-          mysql -e 'CREATE DATABASE IF NOT EXISTS teamproject;'
+          mysql -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS ${{ env.DB_NAME }};'
 
       - name: Run migrations
         run: |
