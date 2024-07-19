@@ -14,6 +14,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DB_NAME: teamproject
+      DB_USER: root
+      DB_PASSWORD: 1234
+      DB_HOST: 127.0.0.1
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,6 +34,14 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+
+      - name: Set up MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade -y
+          sudo apt-get install -y mysql-server
+          sudo service mysql start
+          mysql -e 'CREATE DATABASE IF NOT EXISTS teamproject;'
 
       - name: Run migrations
         run: |
