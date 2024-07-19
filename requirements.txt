@@ -1,4 +1,10 @@
 Django>=3.2,<4.0
 djangorestframework
 django-environ
-# 필요한 다른 패키지들을 여기에 추가합니다.
+mysqlclient
+gunicorn
+psycopg2-binary
+Pillow
+django-cors-headers
+djangorestframework-simplejwt
+whitenoise
